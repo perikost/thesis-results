@@ -1,0 +1,2 @@
+Records collected on 13-06
+Some nodes have more records than others because they experienced some failures

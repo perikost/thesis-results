@@ -1,0 +1,14 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+\begin{table}
+\caption{Table for experiment disconnect}
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+Host    & \multicolumn{7}{c}{Data Size}          & Sample Size \\ \midrule
+& 4096  & 16384  & 65536  & 262144  & 1048576  & 4194304  & 16777216              \\ \midrule
+degroot  & 945  & 639  & 2375  & 771  & 1761  & 801  & 3308  & 12 \\
+graphite-3.nancy  & 1618  & 938  & 1601  & 4838  & 1653  & 2231  & 5079  & 12 \\
+miletus  & 443  & 2086  & 1064  & 3974  & 2504  & 3101  & 7313  & 12 \\
+\bottomrule
+\end{tabular}
+\end{table}
