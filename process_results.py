@@ -52,6 +52,7 @@ def plot_distribution(data, column='Retrieval Time (ms)'):
 def plot_boxplot(data, x='Size (Bytes)', y='Retrieval Time (ms)'):
     fig, _ = plt.subplots()
 
+    data = data.sort_values(by=x)
     data[x] = data[x].apply(bytes_to_size)
     sns.boxplot(x=x, y=y, data=data)
 
