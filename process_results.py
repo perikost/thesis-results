@@ -317,9 +317,6 @@ def process_csv_files(root_dir, column, functions):
 
 
 if __name__ == "__main__":
-    root_dir = './accumulated_csv_records/miletus_degroot_nancy/19-06-2023/ipfs/retrieve'
-    column = 'Retrieval Time (ms)'
-
     # List of functions to apply
     functions = [
     {
@@ -379,6 +376,14 @@ if __name__ == "__main__":
         'output_dir': 'data_grouped'
     }
     ]
-    
-    process_csv_files(root_dir, column, functions)
+
+    root_dirs = [
+        './accumulated_csv_records/11-06 & 12-06 & 16-06 - 18-06/ipfs/retrieve',
+        './accumulated_csv_records/miletus_degroot_nancy/19-06-2023/ipfs/retrieve',
+        './accumulated_csv_records/13-06 & 18-06/swarm/retrieve'
+    ]
+    column = 'Retrieval Time (ms)'
+
+    for root_dir in root_dirs:
+        process_csv_files(root_dir, column, functions)
 

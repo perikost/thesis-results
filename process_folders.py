@@ -77,12 +77,115 @@ def process_experiments(root_dir, column, functions):
 
             del subdirList[:]  # Prevent os.walk from descending into subdirectories
 
+def process_all(root_dir, column, functions):
+    all_data = pd.DataFrame()
+
+    for dirName, subdirList, fileList in os.walk(root_dir):
+        print('Found directory:', dirName)
+        found_csv_foler = False
+
+        for fname in fileList:
+            if fname.endswith('.csv'):
+                print('\tProcessing file:', fname)
+                file_path = os.path.join(dirName, fname)
+                found_csv_foler = True
+
+                data = results.read_all(file_path, dropna=False)
+                all_data = pd.concat([all_data, data], ignore_index=True)
+                    
+    # Process the data only after all CSV files have been appended
+    if found_csv_foler:
+        for func_info in functions:
+            data = all_data.copy()
+
+            dropna = func_info.get('dropna', True)
+            if dropna:
+                data.dropna(inplace=True)
+            
+            if 'data_load_function' in func_info:
+                args = func_info['args']
+                data_load_function = func_info['data_load_function']
+                data = data_load_function(data, *args)
+            
+            function = func_info['function']
+
+            if 'data_process_function' in func_info:
+                process_function = func_info['data_process_function']
+                data = process_function(data)
+
+            data = function(data)
+
+            if 'output_function' in func_info:
+                output_function = func_info['output_function']
+
+                if 'output_dir' in func_info:
+                    output_dir = func_info['output_dir']
+                    output_dir = os.path.join(os.path.dirname(root_dir), os.path.basename(root_dir) + '_processed', output_dir)
+
+                output_function(data, output_dir, 'all')
+
+        del subdirList[:]  # Prevent os.walk from descending into subdirectories
+
+def process_clients(root_dir, column, functions):
+    clients = ['degroot', 'miletus', 'nancy', 'lille', 'grenoble', 'sophia', 'rennes']
+    clients_dic = {}
+    for client in clients:
+        clients_dic[client] = pd.DataFrame()
+
+    # all_data = pd.DataFrame()
+
+    for dirName, subdirList, fileList in os.walk(root_dir):
+        print('Found directory:', dirName)
+        found_csv_foler = False
+
+        for fname in fileList:
+            if fname.endswith('.csv'):
+                for client in clients_dic:
+                    if client in fname:
+                        print('\tProcessing file:', fname)
+                        file_path = os.path.join(dirName, fname)
+                        found_csv_foler = True
+
+                        data = results.read_all(file_path, dropna=False)
+                        clients_dic[client] = pd.concat([clients_dic[client], data], ignore_index=True)
+                    
+    # Process the data only after all CSV files have been appended
+    if found_csv_foler:
+        for func_info in functions:
+            for client in clients_dic:
+                data = clients_dic[client].copy()
+
+                if len(data):
+                    dropna = func_info.get('dropna', True)
+                    if dropna:
+                        data.dropna(inplace=True)
+                    
+                    if 'data_load_function' in func_info:
+                        args = func_info['args']
+                        data_load_function = func_info['data_load_function']
+                        data = data_load_function(data, *args)
+                    
+                    function = func_info['function']
+
+                    if 'data_process_function' in func_info:
+                        process_function = func_info['data_process_function']
+                        data = process_function(data)
+
+                    data = function(data)
+
+                    if 'output_function' in func_info:
+                        output_function = func_info['output_function']
+
+                        if 'output_dir' in func_info:
+                            output_dir = func_info['output_dir']
+                            output_dir = os.path.join(os.path.dirname(root_dir), os.path.basename(root_dir) + '_processed_by_client', output_dir)
+
+                        output_function(data, output_dir, client)
+
+        del subdirList[:]  # Prevent os.walk from descending into subdirectories
 
 
 if __name__ == "__main__":
-    root_dir = './accumulated_csv_records/miletus_degroot_nancy/19-06-2023/ipfs/retrieve'
-    column = 'Retrieval Time (ms)'
-
     # List of functions to apply
     functions = [
     {
@@ -147,4 +250,14 @@ if __name__ == "__main__":
     }
     ]
 
-    process_experiments(root_dir, column, functions)
+    root_dirs = [
+        './accumulated_csv_records/11-06 & 12-06 & 16-06 - 18-06/ipfs/retrieve',
+        './accumulated_csv_records/miletus_degroot_nancy/19-06-2023/ipfs/retrieve',
+        './accumulated_csv_records/13-06 & 18-06/swarm/retrieve'
+    ]
+    column = 'Retrieval Time (ms)'
+
+    for root_dir in root_dirs:
+        process_experiments(root_dir, column, functions)
+        process_all(root_dir, column, functions)
+        process_clients(root_dir, column, functions)
