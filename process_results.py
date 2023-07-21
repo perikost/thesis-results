@@ -303,7 +303,9 @@ def process_csv_files(root_dir, column, functions):
 
                         if 'output_dir' in func_info:
                             output_dir = func_info['output_dir']
-                            output_dir = os.path.join(dirName, output_dir)
+                            parent_dir = os.path.dirname(dirName)
+                            grand_parent_dir = os.path.dirname(dirName)
+                            output_dir = os.path.join(os.path.dirname(grand_parent_dir), os.path.basename(parent_dir) + '_processed_by_experiment_and_client', os.path.basename(dirName), output_dir)
                         name, ext = os.path.splitext(fname)
                         output_function(data, output_dir, name)
         
@@ -314,7 +316,7 @@ def process_csv_files(root_dir, column, functions):
 
 
 if __name__ == "__main__":
-    root_dir = './accumulated_csv_records/11-06 & 12-06 & 16-06 - 18-06/ipfs/retrieve/disconnect'
+    root_dir = './accumulated_csv_records/miletus_degroot_nancy/19-06-2023/ipfs/retrieve'
     column = 'Retrieval Time (ms)'
 
     # List of functions to apply
