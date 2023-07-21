@@ -1,0 +1,7 @@
+Size: 4KB Average value (with outliers) is: 1189.1959375, Average value (excluding outliers) is: 136.26418333333334
+Size: 16KB Average value (with outliers) is: 227.77336999999997, Average value (excluding outliers) is: 89.73322222222222
+Size: 64KB Average value (with outliers) is: 114.3394909090909, Average value (excluding outliers) is: 114.3394909090909
+Size: 256KB Average value (with outliers) is: 143.72182727272727, Average value (excluding outliers) is: 143.72182727272727
+Size: 1MB Average value (with outliers) is: 151.8527181818182, Average value (excluding outliers) is: 151.8527181818182
+Size: 4MB Average value (with outliers) is: 231.95792, Average value (excluding outliers) is: 231.95792
+Size: 16MB Average value (with outliers) is: 612.80648, Average value (excluding outliers) is: 612.80648
